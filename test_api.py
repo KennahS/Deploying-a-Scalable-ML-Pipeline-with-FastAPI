@@ -1,7 +1,7 @@
 import requests
 
 # URL of your running FastAPI app
-url = "http://127.0.0.1:8000/data/"
+base_url = "http://127.0.0.1:8000"
 
 # Example input matching your Data model
 def test_root():
