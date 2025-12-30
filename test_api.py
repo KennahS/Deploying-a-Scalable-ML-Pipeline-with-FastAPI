@@ -1,17 +1,8 @@
+import pytest
+from unittest.mock import patch
 import requests
-import json
 
-# URL of your running FastAPI app
-base_url = "http://127.0.0.1:8000"
-
-# Send a GET request to the root endpoint
-r = requests.get(f"{base_url}/")
-print("GET request:")
-print("Status Code:", r.status_code)
-print("Response:", r.json())
-print("\n")
-
-# Sample data for the POST request
+# Sample data for POST request
 sample_data = {
     "age": 37,
     "workclass": "Private",
@@ -29,8 +20,22 @@ sample_data = {
     "native-country": "United-States",
 }
 
-# Send a POST request to the /data/ endpoint
-r = requests.post(f"{base_url}/data/", json=sample_data)
-print("POST request:")
-print("Status Code:", r.status_code)
-print("Response:", r.json())
+# Mock GET request
+def test_get_root():
+    with patch("requests.get") as mock_get:
+        mock_get.return_value.status_code = 200
+        mock_get.return_value.json.return_value = {"message": "Welcome to the Census Income Classifier API!"}
+
+        response = requests.get("http://127.0.0.1:8000/")
+        assert response.status_code == 200
+        assert response.json()["message"] == "Welcome to the Census Income Classifier API!"
+
+# Mock POST request
+def test_post_inference():
+    with patch("requests.post") as mock_post:
+        mock_post.return_value.status_code = 200
+        mock_post.return_value.json.return_value = {"result": "<=50K"}
+
+        response = requests.post("http://127.0.0.1:8000/data/", json=sample_data)
+        assert response.status_code == 200
+        assert response.json()["result"] in ("<=50K", ">50K")
