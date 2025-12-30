@@ -5,7 +5,6 @@ from ml.data import process_data
 import joblib
 import numpy as np
 from sklearn.ensemble import RandomForestClassifier
-from ml.data import process_data
 # Optional: implement hyperparameter tuning.
 def train_model(X_train, y_train):
     """
@@ -126,28 +125,24 @@ def performance_on_categorical_slice(
 
     """
     # TODO: implement the function
-    data, feature, value,
-    model, encoder, lb,
-    categorical_features
-):
-    slice_df = data[data[feature] == value]
+    slice_df = data[data[column_name] == slice_value]
 
     if slice_df.shape[0] == 0:
         return None, None, None, 0
 
     X_slice, y_slice, _, _ = process_data(
-        slice_df.drop("salary", axis=1),
-        slice_df["salary"],
-        categorical_features=categorical_features,
-        training=False,
-        encoder=encoder,
-        lb=lb
-    )
+    slice_df,
+    categorical_features=categorical_features,
+    label="salary",
+    training=False,
+    encoder=encoder,
+    lb=lb
+)
 
     preds = inference(model, X_slice)
 
-    precision = precision_score(y_slice, preds)
-    recall = recall_score(y_slice, preds)
-    f1 = fbeta_score(y_slice, preds, beta=1)
-
+    precision = precision_score(y_slice, preds, zero_division=1)
+    recall = recall_score(y_slice, preds, zero_division=1)
+    f1 = fbeta_score(y_slice, preds, beta=1, zero_division=1)
+    
     return precision, recall, f1, slice_df.shape[0]
