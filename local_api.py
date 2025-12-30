@@ -1,6 +1,7 @@
 import json
 
 import requests
+base_url = "http://127.0.0.1:8000"
 
 # TODO: send a GET using the URL http://127.0.0.1:8000
 r = requests.get(f"{base_url}/")
