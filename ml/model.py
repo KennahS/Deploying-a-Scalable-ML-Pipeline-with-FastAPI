@@ -23,7 +23,12 @@ def train_model(X_train, y_train):
         Trained machine learning model.
     """
     # TODO: implement the function
-    pass
+    model = RandomForestClassifier(
+        n_estimators=100,
+        random_state=42
+    )
+    model.fit(X_train, y_train)
+    return model
 
 
 def compute_model_metrics(y, preds):
@@ -63,7 +68,7 @@ def inference(model, X):
         Predictions from the model.
     """
     # TODO: implement the function
-    pass
+    return model.predict(X)
 
 def save_model(model, path):
     """ Serializes model to a file.
@@ -76,12 +81,12 @@ def save_model(model, path):
         Path to save pickle file.
     """
     # TODO: implement the function
-    pass
+    joblib.dump(model, path)
 
 def load_model(path):
     """ Loads pickle file from `path` and returns it."""
     # TODO: implement the function
-    pass
+    return joblib.load(path)
 
 
 def performance_on_categorical_slice(
@@ -121,11 +126,28 @@ def performance_on_categorical_slice(
 
     """
     # TODO: implement the function
+    data, feature, value,
+    model, encoder, lb,
+    categorical_features
+):
+    slice_df = data[data[feature] == value]
+
+    if slice_df.shape[0] == 0:
+        return None, None, None, 0
+
     X_slice, y_slice, _, _ = process_data(
-        # your code here
-        # for input data, use data in column given as "column_name", with the slice_value 
-        # use training = False
+        slice_df.drop("salary", axis=1),
+        slice_df["salary"],
+        categorical_features=categorical_features,
+        training=False,
+        encoder=encoder,
+        lb=lb
     )
-    preds = None # your code here to get prediction on X_slice using the inference function
-    precision, recall, fbeta = compute_model_metrics(y_slice, preds)
-    return precision, recall, fbeta
+
+    preds = inference(model, X_slice)
+
+    precision = precision_score(y_slice, preds)
+    recall = recall_score(y_slice, preds)
+    f1 = fbeta_score(y_slice, preds, beta=1)
+
+    return precision, recall, f1, slice_df.shape[0]
