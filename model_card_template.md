@@ -5,7 +5,7 @@ For additional information see the Model Card paper: https://arxiv.org/pdf/1810.
 ## Model Details
 This is a Census Income Classifier that predicts whether an individual's income is above or below $50K.
 
-Model type: Random Forest (or whatever you used in train_model.py).
+Model type: Random Forest.
 
 Framework: scikit-learn.
 ## Intended Use
