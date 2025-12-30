@@ -2,28 +2,27 @@ import pytest
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestRegressor
 # TODO: add necessary import
 from ml.data import process_data
 from ml.model import train_model, compute_model_metrics
 
-# DO NOT MODIFY (same as training script)
-CAT_FEATURES = [
-    "workclass",
-    "education",
-    "marital-status",
-    "occupation",
-    "relationship",
-    "race",
-    "sex",
-    "native-country",
-]
 
 # TODO: implement the first test. Change the function name and input as needed
 def test_one():
     """
     # Test that process_data returns expected data types
     """
+    cat_features = [
+        "workclass",
+        "education",
+        "marital-status",
+        "occupation",
+        "relationship",
+        "race",
+        "sex",
+        "native-country",
+    ]
+
     data = pd.read_csv("data/census.csv")
 
     train, _ = train_test_split(
@@ -49,6 +48,19 @@ def test_two():
     """
     # Test that train_model returns the expected model type
     """
+    from sklearn.ensemble import RandomForestClassifier
+
+    cat_features = [
+        "workclass",
+        "education",
+        "marital-status",
+        "occupation",
+        "relationship",
+        "race",
+        "sex",
+        "native-country",
+    ]
+
     data = pd.read_csv("data/census.csv")
 
     train, _ = train_test_split(
