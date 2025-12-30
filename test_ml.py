@@ -3,7 +3,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
 # TODO: add necessary import
 from ml.data import process_data
-from ml.model import train_model, inference
+from ml.model import train_model, compute_model_metrics
 
 # DO NOT MODIFY (same as training script)
 CAT_FEATURES = [
@@ -20,22 +20,38 @@ CAT_FEATURES = [
 # TODO: implement the first test. Change the function name and input as needed
 def test_one():
     """
-    # Test that the dataset loads correctly and is not empty
+    # Test that process_data returns expected data types
     """
     data = pd.read_csv("data/census.csv")
 
-    assert data is not None
-    assert len(data) > 0
+    train, _ = train_test_split(
+        data,
+        test_size=0.2,
+        random_state=42,
+        stratify=data["salary"],
+    )
+
+    X, y, encoder, lb = process_data(
+        train,
+        categorical_features=cat_features,
+        label="salary",
+        training=True,
+    )
+
+    assert isinstance(X, np.ndarray)
+    assert isinstance(y, np.ndarray)
+    assert X.shape[0] == y.shape[0]
 
 # TODO: implement the second test. Change the function name and input as needed
 def test_two():
     """
-    # Test that the trained model is a RandomForestRegressor
+    # Test that train_model returns the expected model type
     """
     data = pd.read_csv("data/census.csv")
+
     train, _ = train_test_split(
         data,
-        test_size=0.20,
+        test_size=0.2,
         random_state=42,
         stratify=data["salary"],
     )
@@ -52,39 +68,20 @@ def test_two():
     assert isinstance(model, RandomForestClassifier)
 
 
-
 # TODO: implement the third test. Change the function name and input as needed
 def test_three():
     """
-    # Test that the model can generate predictions
-    and that the output length matches the input
+    # Test that compute_model_metrics returns valid metric values
     """
-    data = pd.read_csv("data/census.csv")
-    train, test = train_test_split(
-        data,
-        test_size=0.20,
-        random_state=42,
-        stratify=data["salary"],
-    )
+    y_true = np.array([1, 0, 1, 1])
+    y_pred = np.array([1, 0, 0, 1])
 
-    X_train, y_train, encoder, lb = process_data(
-        train,
-        categorical_features=cat_features,
-        label="salary",
-        training=True,
-    )
+    precision, recall, fbeta = compute_model_metrics(y_true, y_pred)
 
-    X_test, _, _, _ = process_data(
-        test,
-        categorical_features=cat_features,
-        label="salary",
-        training=False,
-        encoder=encoder,
-        lb=lb,
-    )
+    assert isinstance(precision, float)
+    assert isinstance(recall, float)
+    assert isinstance(fbeta, float)
 
-    model = train_model(X_train, y_train)
-    preds = inference(model, X_test)
-
-    assert preds is not None
-    assert len(preds) == len(X_test)
+    assert 0.0 <= precision <= 1.0
+    assert 0.0 <= recall <= 1.0
+    assert 0.0 <= fbeta <= 1.0
