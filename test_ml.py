@@ -1,28 +1,65 @@
 import pytest
 # TODO: add necessary import
+from fastapi.testclient import TestClient
+from main import app
 
 # TODO: implement the first test. Change the function name and input as needed
 def test_one():
     """
-    # add description for the first test
+    # Test the root endpoint returns a welcome message
     """
-    # Your code here
-    pass
+    response = client.get("/")
+    assert response.status_code == 200
+    assert response.json() == {"message": "Welcome to the Census Income Classifier API!"}
+
+client = TestClient(app)
 
 
 # TODO: implement the second test. Change the function name and input as needed
 def test_two():
     """
-    # add description for the second test
+    # Test /data/ endpoint with a valid sample input
     """
-    # Your code here
-    pass
+    sample_data = {
+        "age": 37,
+        "workclass": "Private",
+        "fnlgt": 178356,
+        "education": "HS-grad",
+        "education-num": 10,
+        "marital-status": "Married-civ-spouse",
+        "occupation": "Prof-specialty",
+        "relationship": "Husband",
+        "race": "White",
+        "sex": "Male",
+        "capital-gain": 0,
+        "capital-loss": 0,
+        "hours-per-week": 40,
+        "native-country": "United-States"
+    }
+    response = client.post("/data/", json=sample_data)
+    assert response.status_code == 200
+    assert "result" in response.json()
 
 
 # TODO: implement the third test. Change the function name and input as needed
 def test_three():
     """
-    # add description for the third test
+    # Test /data/ endpoint with invalid input (missing 'age')
     """
-    # Your code here
-    pass
+    sample_data = {
+        "workclass": "Private",
+        "fnlgt": 178356,
+        "education": "HS-grad",
+        "education-num": 10,
+        "marital-status": "Married-civ-spouse",
+        "occupation": "Prof-specialty",
+        "relationship": "Husband",
+        "race": "White",
+        "sex": "Male",
+        "capital-gain": 0,
+        "capital-loss": 0,
+        "hours-per-week": 40,
+        "native-country": "United-States"
+    }
+    response = client.post("/data/", json=sample_data)
+    assert response.status_code == 422

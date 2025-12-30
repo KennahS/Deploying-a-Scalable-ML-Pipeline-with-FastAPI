@@ -54,7 +54,7 @@ async def post_inference(data: Data):
     # The data has names with hyphens and Python does not allow those as variable names.
     # Here it uses the functionality of FastAPI/Pydantic/etc to deal with this.
     data_df = {k.replace("_", "-"): [v] for k, v in data_dict.items()}
-    data_df = pd.DataFrame.from_dict(data)
+    data_df = pd.DataFrame.from_dict(data_df)
 
     cat_features = [
         "workclass",
