@@ -1,6 +1,7 @@
 import os
 
 import pandas as pd
+import joblib
 from sklearn.model_selection import train_test_split
 
 from ml.data import process_data
@@ -12,6 +13,9 @@ from ml.model import (
     save_model,
     train_model,
 )
+
+os.makedirs("artifacts", exist_ok=True)
+
 # TODO: load the cencus.csv data
 data = pd.read_csv("data/census.csv")
 
@@ -57,9 +61,12 @@ X_test, y_test, _, _ = process_data(
 model = train_model(X_train, y_train)
 
 # save the model and the encoder
-save_model(model, "model/model.pkl")
-save_model(encoder, "model/encoder.pkl")
-save_model(lb, "model/lb.pkl")
+joblib.dump(model, "artifacts/model.pkl")
+joblib.dump(encoder, "artifacts/encoder.pkl")
+joblib.dump(lb, "artifacts/lb.pkl")
+
+print("✅ Model and artifacts saved in 'artifacts/' folder.")
+
 
 # load the model
 model = load_model("model/model.pkl")

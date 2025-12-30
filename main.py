@@ -26,9 +26,9 @@ class Data(BaseModel):
     hours_per_week: int = Field(..., example=40, alias="hours-per-week")
     native_country: str = Field(..., example="United-States", alias="native-country")
 
-encoder_path = "path/to/encoder.pkl"
-lb_path = "path/to/lb.pkl"
-model_path = "path/to/model.pkl"
+encoder_path = "artifacts/encoder.pkl"
+lb_path = "artifacts/lb.pkl"
+model_path = "artifacts/model.pkl"
 
 encoder = load_model(encoder_path)
 lb = load_model(lb_path)
