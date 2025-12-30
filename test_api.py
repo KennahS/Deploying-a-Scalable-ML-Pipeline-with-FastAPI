@@ -28,6 +28,7 @@ def test_post_data():
         "hours-per-week": 40,
         "native-country": "United-States"
     }
+    response = requests.get(f"{base_url}/")
     response = requests.post(f"{base_url}/data/", json=sample_data)
     assert response.status_code == 200
     assert response.json().get("result")[0] in ["<=50K", ">50K"]
