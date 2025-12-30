@@ -32,7 +32,7 @@ def test_two():
     """
     # Test that the trained model is a RandomForestRegressor
     """
-     data = pd.read_csv("data/census.csv")
+    data = pd.read_csv("data/census.csv")
     train, _ = train_test_split(
         data,
         test_size=0.20,
